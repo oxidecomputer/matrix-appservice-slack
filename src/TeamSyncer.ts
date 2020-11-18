@@ -470,7 +470,7 @@ export class TeamSyncer {
                 name: `#${channel.name}`,
                 topic,
                 visibility: isPublic ? "public" : "private",
-                room_alias: alias,
+                room_alias_name: alias,
                 preset: isPublic ? "public_chat" : "private_chat",
                 invite: inviteList,
                 initial_state: extraContent,
