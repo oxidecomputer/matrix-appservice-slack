@@ -46,7 +46,10 @@ export class PgDatastore implements Datastore, ClientEncryptionStore {
     public readonly postgresDb: IDatabase<any>;
 
     constructor(connectionString: string) {
-        this.postgresDb = pgp(connectionString);
+        this.postgresDb = pgp({
+            connectionString: connectionString,
+            max: 2,
+        });
     }
 
     public async upsertUser(user: SlackGhost): Promise<null> {
