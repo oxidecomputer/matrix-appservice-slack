@@ -170,9 +170,22 @@ export class SlackGhost {
 
         if (client) { // We can be smarter if we have the bot.
             if (message.bot_id && message.user_id) {
-                // In the case of operations on bots, we will have both a bot_id and a user_id.
-                // Ignore updating the displayname in this case.
-                return;
+                if (message.bot_id == message.user_id && message.username) {
+                    /*
+                     * The "Mio" bridge between Microsoft Teams and Slack
+                     * creates fictional users with IDs that are not real user
+                     * IDs.  These messages will have the bot_id and user_id
+                     * fields set to the same fictional value, and the username
+                     * field set to the display name in Teams of the sender of
+                     * the message.  Allow that username to become the
+                     * displayname.
+                     */
+                    log.debug(`Using username from bot ${message.bot_id}`);
+                } else {
+                    // In the case of operations on bots, we will have both a bot_id and a user_id.
+                    // Ignore updating the displayname in this case.
+                    return;
+                }
             } else if (message.bot_id) {
                 displayName = await this.getBotName(message.bot_id, client);
             } else if (message.user_id) {
